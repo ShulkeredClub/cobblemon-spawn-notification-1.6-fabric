@@ -34,39 +34,32 @@ class SpawnBroadcaster(
     fun getBroadcast(): Text? {
         if (!shouldBroadcast) return null
 
-        return config.getComponent(
-            "notification.spawn",
-            if (shiny && config.broadcastShiny) config.getComponent(
-                "notification.shiny",
-                config.getComponent("shiny")
-            ) else "",
-            if (label != null) config.getComponent(
-                "notification.label",
-                config.getComponent("label.$label")
-            ) else "",
-            if (bucket != null) config.getComponent(
-                "notification.bucket",
-                config.getComponent("bucket.$bucket")
-            ) else "",
-            if (config.broadcastSpeciesName) pokemon.species.translatedName else Text.translatable("cobblemon.entity.pokemon"),
-            if (config.broadcastBiome) config.getComponent(
-                "notification.biome",
-                config.getRawComponent("biome.${biome.toTranslationKey()}")
-            ) else "",
-            if (config.broadcastCoords) config.getComponent(
-                "notification.coords",
-                coords.x,
-                coords.y,
-                coords.z
-            ) else "",
-            if (config.announceCrossDimensions) config.getComponent(
-                "notification.dimension",
-                config.getRawComponent("dimension.${dimension.toTranslationKey()}")
-            ) else "",
-            if (config.broadcastPlayerSpawnedOn && player != null) config.getComponent(
-                "notification.player",
-                player.name
-            ) else ""
-        )
+        var msg = "Un%poke%%type%%bucket% è spawnato%biome%%pos%%cross%%near%"
+
+        if(shiny && config.broadcastShiny) msg = msg.replace("%type%", " shiny")
+        else msg = msg.replace("%type%", "")
+
+        /*if (label != null) msg = msg.replace("2", " ${label}")
+        else msg = msg.replace("2", "")*/
+
+        if (bucket != null) msg = msg.replace("%bucket%", " $bucket")
+        else msg = msg.replace("%bucket%", "")
+
+        if(config.broadcastSpeciesName) msg = msg.replace("%poke%", " ${pokemon.species.translatedName.string}")
+        else msg = msg.replace("%poke%", Text.translatable("cobblemon.entity.pokemon").string)
+
+        if (config.broadcastBiome) msg = msg.replace("%biome%", " ${biome.toTranslationKey()}")
+        else msg = msg.replace("%biome%", "")
+
+        if (config.announceCrossDimensions) msg = msg.replace("%cross%", " in ${dimension.toTranslationKey().replace("minecraft.", "")}")
+        else msg = msg.replace("%cross%", "")
+
+        if (config.broadcastPlayerSpawnedOn && player != null) msg = msg.replace("%near%", " vicino a ${player.name.string}")
+        else msg = msg.replace("%near%", "")
+
+        if (config.broadcastCoords) msg = msg.replace("%pos%", " a ${coords.x}, ${coords.y}, ${coords.z}")
+        else msg = msg.replace("%pos%", "")
+
+        return Text.of(msg)
     }
 }

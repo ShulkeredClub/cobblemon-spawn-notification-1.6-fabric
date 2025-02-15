@@ -4,6 +4,10 @@
 
 When a Legendary and/or Shiny Pokemon shows up, a message is broadcast to all players on the server.
 
+This is a modified version that pretty much sends the spawn notification server-sided so that clients don't need to install the mod to actually view the spawn messages.
+Please note that the server-side fix is terrible and "just works" - if anybody wants to improve it please open a pull request.
+The spawn message has also been translated to Italian.
+
 ## Help
 
 [Discord](https://discord.com/invite/WKAR27SdSv)
