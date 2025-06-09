@@ -9,8 +9,8 @@ import us.timinc.mc.cobblemon.spawnnotification.util.PlayerUtil.getValidPlayers
 
 object PlayShinySound {
     fun handle(evt: SpawnEvent<PokemonEntity>) {
-        val world = evt.ctx.world
-        val pos = evt.ctx.position
+        val world = evt.entity.world
+        val pos = evt.spawnablePosition.position
 
         if (config.playShinySound && evt.entity.pokemon.shiny) {
             val broadcaster = SoundBroadcaster(

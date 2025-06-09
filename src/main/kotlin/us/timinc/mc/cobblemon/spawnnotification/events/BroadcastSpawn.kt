@@ -10,8 +10,8 @@ import us.timinc.mc.cobblemon.spawnnotification.util.PlayerUtil.getValidPlayers
 
 object BroadcastSpawn {
     fun handle(evt: SpawnEvent<PokemonEntity>) {
-        val world = evt.ctx.world
-        val pos = evt.ctx.position
+        val world = evt.spawnablePosition.world
+        val pos = evt.entity.positionTarget
         val pokemon = evt.entity.pokemon
 
         if (world.isClient) return
@@ -19,11 +19,11 @@ object BroadcastSpawn {
 
         SpawnBroadcaster(
             evt.entity.pokemon,
-            evt.ctx.spawner.getSpawnPool(),
-            evt.ctx.position,
-            evt.ctx.biomeName,
-            evt.ctx.world.dimensionEntry.key.get().value,
-            if (evt.ctx.spawner is PlayerSpawner) (evt.ctx.spawner as PlayerSpawner).getCauseEntity() else null
+            evt.spawnablePosition.spawner.getSpawnPool(), //fix
+            evt.spawnablePosition.position,
+            evt.spawnablePosition.biomeName,
+            evt.spawnablePosition.world.dimensionEntry.key.get().value,
+            if (evt.spawnablePosition.spawner is PlayerSpawner) (evt.spawnablePosition.spawner as PlayerSpawner).getCauseEntity() else null
         ).getBroadcast()?.let { message ->
             if (config.announceCrossDimensions) {
                 Broadcast.broadcastMessage(message)
